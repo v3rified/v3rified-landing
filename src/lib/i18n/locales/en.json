@@ -1,0 +1,16 @@
+{
+  "app": {
+    "name": "Drun"
+  },
+  "seo": {
+    "title": "Drun"
+  },
+  "actions": {
+    "readMore": "Read more",
+    "readLess": "Read less",
+    "explore": "Explore",
+    "launchApp": "Launch App",
+    "sendEmail": "Send email",
+    "goHome": "Go home"
+  }
+}
