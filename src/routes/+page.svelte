@@ -1,17 +1,20 @@
 <script>
+    import {browser} from "$app/env";
     import FooterComponent from "$components/Footer/FooterComponent.svelte";
     import HomeSection from '$components/HomeSection/HomeSection.svelte';
     import PeopleCarousel from "$components/PeopleCarousel.svelte";
-    import AheadNumber from "$icons/AheadNumber.svelte";
     import Logo from "$icons/Logo.svelte";
     import Saos from "saos";
-    import {scale} from 'svelte/transition';
+    import {onMount} from "svelte";
+    import {fly, scale} from 'svelte/transition';
 
     export const prerender = false;
     let rootView;
     let scrollIntroRef;
     let currentIndex = 0;
     let isBetaSignup = false;
+    let introTimer;
+    let queueTimer;
     const intros = [
         {
             title: "NextGen Fan Experience Platform",
@@ -48,15 +51,27 @@
     const news = [
         {
             title: "Navigating the Future",
-            desc: "The product roadmap for a V3RIFIED’s experience and social platform & its implications for KPOP fandoms.\n"
+            desc: "The product roadmap for a V3RIFIED’s experience and social platform & its implications for KPOP fandoms.\n",
+            link:'https://beta.v3rified.io/p/roadmap-and-the-road-forward'
         }, {
             title: "Redefine the Culture",
-            desc: "Our motivation for embarking on the journey to provide transformational value for genuine fans. \n"
+            desc: "Our motivation for embarking on the journey to provide transformational value for genuine fans. \n",
+            link: 'https://beta.v3rified.io/p/redefine-culture-mission-vision'
         }, {
             title: "The Power of Fandoms",
-            desc: "Fandoms play a significant role in building social connections and excitement for creators."
+            desc: "Fandoms play a significant role in building social connections and excitement for creators.",
+            link: 'https://beta.v3rified.io/p/the-power-of-fandoms'
         }
     ]
+
+
+    function loopIntroIndex() {
+        clearTimeout(introTimer);
+        introTimer = setTimeout(() => {
+            onChangeIndex(currentIndex + 1)
+            loopIntroIndex();
+        }, 5000);
+    }
 
 
     function onScrollIntro(event) {
@@ -65,10 +80,18 @@
     }
 
     function onChangeIndex(index) {
+        if (index === 4) {
+            index = 0;
+        }
         currentIndex = index;
         scrollIntroRef.scrollTo({left: window.innerWidth * index, behavior: 'smooth'})
     }
 
+    onMount(() => {
+        if (browser) {
+            loopIntroIndex();
+        }
+    })
 
 </script>
 <style lang='postcss'>
@@ -132,10 +155,48 @@
     }
 
 
-
     .bg-queue-left {
-        background: linear-gradient(0deg, rgba(0, 0, 0, 0.30) 0%, rgba(0, 0, 0, 0.30) 100%), linear-gradient(to bottom right, rgba(27, 110, 38, 0.60) 0%, rgba(39, 201, 60, 0.60) 15%, rgba(135, 233, 124, 0.60) 31%, rgba(22, 88, 58, 0.60) 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, rgba(27, 110, 38, 0.60) 0%, rgba(39, 201, 60, 0.60) 15%, rgba(135, 233, 124, 0.60) 31%, rgba(22, 88, 58, 0.60) 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, rgba(27, 110, 38, 0.60) 0%, rgba(39, 201, 60, 0.60) 15%, rgba(135, 233, 124, 0.60) 31%, rgba(22, 88, 58, 0.60) 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, rgba(27, 110, 38, 0.60) 0%, rgba(39, 201, 60, 0.60) 15%, rgba(135, 233, 124, 0.60) 31%, rgba(22, 88, 58, 0.60) 50%) top right / 50% 50% no-repeat;
-        @apply flex flex-1 w-full h-full;
+        background: #0F2212;
+        @apply flex flex-1 w-full h-full relative;
+    }
+
+    .bg-queue-left img {
+        opacity: 0;
+        animation: change-img-anim 12s infinite;
+    }
+
+    .bg-queue-left img:nth-of-type(1) {
+        animation-delay: 0s;
+    }
+
+    .bg-queue-left img:nth-of-type(2) {
+        animation-delay: 3s;
+    }
+
+    .bg-queue-left img:nth-of-type(3) {
+        animation-delay: 6s;
+    }
+
+    .bg-queue-left img:nth-of-type(4) {
+        animation-delay: 9s;
+    }
+
+    @keyframes change-img-anim {
+        0% {
+            opacity: 0;
+            transform: translateX(-50px);
+            z-index: 0
+        }
+        25% {
+            opacity: 1;
+            transform: translateX(0px);
+            z-index: 1
+        }
+        100% {
+            opacity: 0;
+            transform: translateX(0);
+            z-index: 0
+        }
     }
 
     .bg-queue-right {
@@ -144,12 +205,6 @@
     }
 
     .ahead-container {
-        border-radius: 20px;
-        border: 1px solid #1F4B25;
-        background: linear-gradient(105deg, rgba(57, 18, 63, 0.20) -11.5%, rgba(255, 255, 255, 0.00) 106.54%);
-        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-        backdrop-filter: blur(15px);
-        @apply lg:mr-[80px] py-[42px];
     }
 
     .skip-queue-container {
@@ -161,7 +216,7 @@
         border: 2px solid #1DD836;
         background: linear-gradient(279deg, #1DD836 -93.06%, rgba(217, 217, 217, 0.00) 53.08%);
         color: #1DD836;
-        @apply text-xl font-bold px-10 h-[60px] mr-auto mt-[44px];
+        @apply text-xl font-bold px-10 h-[60px] mr-auto mt-[44px] flex items-center justify-center;
     }
 
     :global(.intro-desc) {
@@ -198,7 +253,7 @@
     .btn-view-post {
         border-radius: 40px;
         background: rgba(255, 255, 255, 0.20);
-        @apply h-[54px] text-lg font-bold mt-10;
+        @apply h-[54px] text-lg font-bold mt-10 flex items-center justify-center;
     }
 
     .btn-view-post:hover {
@@ -246,7 +301,7 @@
                 <Logo class="h-[60px] w-[134px] lg:w-[257px] lg:h-[115px]"/>
             </Saos>
             <Saos top="200" animation={"h2 1s cubic-bezier(0.35, 0.5, 0.65, 0.95) both"}>
-                <h2 class="text-light text-xs lg:text-base max-w-[519px]">For the fan, by the fan experiences powered by Smart Ticketing and Community Action </h2>
+                <h2 class="text-light text-xs lg:text-base max-w-[519px] flex items-start">{'For the fan, by the fan experiences powered by Smart Ticketing and Community Action'}</h2>
             </Saos>
         </div>
 
@@ -254,12 +309,17 @@
 
     <HomeSection id="queue" contentClass="!min-h-[unset]" class="mt-5 lg:mt-[-15px]">
         <div class="absolute z-0 flex flex-col lg:flex-row top-0 bottom-0 left-0 right-0">
-            <div class="bg-queue-left"/>
+            <div class="bg-queue-left">
+                {#each [1, 2, 3, 4] as item}
+                    <img alt="queue" src={`/images/queue_${item}.png`}
+                         class="absolute object-cover w-full h-full transition-all"/>
+                {/each}
+            </div>
             <div class="bg-queue-right"/>
         </div>
         <div class="default-container z-[1] flex !flex-col lg:!flex-row justify-center gap-2.5 lg:gap-[10vw] h-[360px] my-[118px]">
             <div class="flex flex-1 justify-center items-center ahead-container">
-                <AheadNumber/>
+
             </div>
             <div class="skip-queue-container">
                 <Saos top="200" animation={"h2 1s cubic-bezier(0.35, 0.5, 0.65, 0.95) both"}>
@@ -286,16 +346,16 @@
                                 </Saos>
                             </div>
                             <Saos top="200" animation={"h2 1s cubic-bezier(0.35, 0.5, 0.65, 0.95) both"}>
-                            <span class="text-light text-xl mt-4">{intro.title}</span>
+                                <span class="text-light text-xl mt-4">{intro.title}</span>
                             </Saos>
                             <span class="intro-desc">{@html intro.desc}</span>
-                            <button class="button-skip mt-5 w-[248px]">Docs</button>
+                            <a href="https://docs.v3rified.io/" target="_blank" class="button-skip mt-5 w-[248px]">Docs</a>
                         </div>
                         <div class="flex-1 flex h-[100vh] lg:ml-[73px] justify-center items-center relative">
 
                             <Saos top="200" animation={"slide-right 1s cubic-bezier(0.35, 0.5, 0.65, 0.95) both"}>
-                            <img src={`/images/intro_${index+1}.png`}
-                                 class="h-[300px] lg:h-[70vh] object-contain z-[1]"/>
+                                <img src={`/images/intro_${index+1}.png`}
+                                     class="h-[300px] lg:h-[70vh] object-contain z-[1]"/>
                             </Saos>
                         </div>
                     </div>
@@ -338,7 +398,7 @@
                             <img src={`/images/news_${index+1}.png`} class="w-[100%] h-[150px] lg:h-[14.5vw]"/>
                             <span class="font-okana text-xl lg:text-[2.5rem] font-bold  leading-normal lg:mt-14 news-title">{item.title}</span>
                             <span class="tex-sm font-bold text-light leading-[176%]  lime-clamp-2">{item.desc}</span>
-                            <button class="btn-view-post">View post</button>
+                            <a href={item.link} target="_blank" class="btn-view-post">View post</a>
                         </div>
                     {/each}
                     <div class="min-w-[20vw] h-[100px]"/>
@@ -353,11 +413,11 @@
         <img class={`w-full ${isBetaSignup?'h-[553px]':'h-[453px]'} absolute`} src="/images/bg_community.png"/>
         <div class={`default-container ${isBetaSignup?'h-[553px]':'h-[453px]'} z-[1] relative items-center justify-center`}>
             <Saos top="200" animation={"h2 1s cubic-bezier(0.35, 0.5, 0.65, 0.95) both"}>
-            <h2 class="font-okana text-2xl lg:text-[2.25rem] font-bold leading-normal">Let’s build community together</h2>
+                <h2 class="font-okana text-2xl lg:text-[2.25rem] font-bold leading-normal">{'Let’s build community together'}</h2>
             </Saos>
             <div class="mt-10">
                 <Saos top="200" animation={"h2 1s cubic-bezier(0.35, 0.5, 0.65, 0.95) both"}>
-                    <h2 class="font-okana text-[#1DD836] text-lg lg:text-[1.875rem] font-bold leading-normal"># FOR THE FANS BY THE FANS</h2>
+                    <h2 class="font-okana text-[#1DD836] text-lg lg:text-[1.875rem] font-bold leading-normal">{'# FOR THE FANS BY THE FANS'}</h2>
                 </Saos>
             </div>
             <div transition:scale={{

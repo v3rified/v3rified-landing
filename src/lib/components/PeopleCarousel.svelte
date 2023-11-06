@@ -25,7 +25,6 @@
     ]
 
     $: isLeft = (index) => {
-        console.log("isLeft", index, currentIndex)
         if (currentIndex === 0) {
             return index === 2;
         } else {
