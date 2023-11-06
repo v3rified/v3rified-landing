@@ -14,7 +14,7 @@
 <link
 	href='https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap'
 	rel='stylesheet'>
-<title>AIRIan</title>
+<title>V3rified</title>
 <style global lang='postcss'>
 </style>
 
