@@ -1,8 +1,8 @@
 version: '3'
 services:
-  drun-teaser:
+  v3rified-teaser:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3012:3012"
+      - "3013:3013"

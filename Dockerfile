@@ -7,7 +7,7 @@ RUN yarn install
 COPY . ./
 RUN yarn build
 
-EXPOSE 3012
+EXPOSE 3013
 CMD ["yarn", "start"]
 
 
