@@ -4,13 +4,14 @@
     import PeopleCarousel from "$components/PeopleCarousel.svelte";
     import AheadNumber from "$icons/AheadNumber.svelte";
     import Logo from "$icons/Logo.svelte";
-
+    import Saos from "saos";
+    import {scale} from 'svelte/transition';
 
     export const prerender = false;
     let rootView;
-    let showDarkHeaderBg = false;
-    let scrollTop = 0;
+    let scrollIntroRef;
     let currentIndex = 0;
+    let isBetaSignup = false;
     const intros = [
         {
             title: "NextGen Fan Experience Platform",
@@ -58,10 +59,14 @@
     ]
 
 
+    function onScrollIntro(event) {
+        let scrollLeft = event.target.scrollLeft;
+        currentIndex = Math.floor(scrollLeft / window.innerWidth);
+    }
 
-    function onScroll(event) {
-        let windowHeight = window.innerHeight;
-        scrollTop = event.target.scrollTop;
+    function onChangeIndex(index) {
+        currentIndex = index;
+        scrollIntroRef.scrollTo({left: window.innerWidth * index, behavior: 'smooth'})
     }
 
 
@@ -104,20 +109,9 @@
     }
 
 
-    @keyframes -global-video-scale {
+    @keyframes -global-slide-right {
         0% {
-            transform: scale(0.5);
-            opacity: 0;
-        }
-        100% {
-            transform: scale(1);
-            opacity: 1;
-        }
-    }
-
-    @keyframes -global-in {
-        0% {
-            transform: translateY(100px);
+            transform: translateX(100px);
             opacity: 0;
             text-align: center;
         }
@@ -137,29 +131,7 @@
         }
     }
 
-    @keyframes -global-fade-top {
-        0% {
-            transform: translateY(-50px);
-            opacity: 0;
-        }
-        100% {
-            transform: translateY(0);
-            opacity: 1;
-        }
-    }
 
-    @keyframes -global-out {
-        0% {
-            transform: translateY(0);
-            opacity: 1;
-            text-align: center;
-        }
-        100% {
-            transform: translateY(-100px);
-            opacity: 0;
-            text-align: center;
-        }
-    }
 
     .bg-queue-left {
         background: linear-gradient(0deg, rgba(0, 0, 0, 0.30) 0%, rgba(0, 0, 0, 0.30) 100%), linear-gradient(to bottom right, rgba(27, 110, 38, 0.60) 0%, rgba(39, 201, 60, 0.60) 15%, rgba(135, 233, 124, 0.60) 31%, rgba(22, 88, 58, 0.60) 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, rgba(27, 110, 38, 0.60) 0%, rgba(39, 201, 60, 0.60) 15%, rgba(135, 233, 124, 0.60) 31%, rgba(22, 88, 58, 0.60) 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, rgba(27, 110, 38, 0.60) 0%, rgba(39, 201, 60, 0.60) 15%, rgba(135, 233, 124, 0.60) 31%, rgba(22, 88, 58, 0.60) 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, rgba(27, 110, 38, 0.60) 0%, rgba(39, 201, 60, 0.60) 15%, rgba(135, 233, 124, 0.60) 31%, rgba(22, 88, 58, 0.60) 50%) top right / 50% 50% no-repeat;
@@ -181,7 +153,7 @@
     }
 
     .skip-queue-container {
-        @apply flex flex-1 flex-col h-full justify-center
+        @apply flex flex-1 flex-col h-full justify-center;
     }
 
     .button-skip {
@@ -220,7 +192,7 @@
         background: linear-gradient(105deg, rgba(57, 18, 63, 0.20) -11.5%, rgba(255, 255, 255, 0.00) 106.54%);
         box-shadow: 0px 3.38318px 3.38318px 0px rgba(0, 0, 0, 0.25);
         backdrop-filter: blur(12.686915397644043px);
-        @apply flex flex-col w-full lg:w-[31vw] p-6;
+        @apply flex flex-col w-full lg:min-w-[28vw] p-6 gap-5;
     }
 
     .btn-view-post {
@@ -231,6 +203,14 @@
 
     .btn-view-post:hover {
         background: linear-gradient(269deg, #1DD836 -30.4%, #043E0C 100.98%);
+
+    }
+
+    .news-title {
+        background: -webkit-linear-gradient(0deg, #EBFF24 -4.04%, #1DD836 41.21%, #87E97C 118.65%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
 
     }
 
@@ -248,15 +228,26 @@
         @apply font-bold text-xl w-[308px] h-[62px];
     }
 
+    .blur-news {
+        background: linear-gradient(-90deg, #000 30.24%, rgba(0, 0, 0, 0.00) 90.93%);
+        height: 100%;
+        @apply absolute right-0 w-[30vw];
+    }
+
 
 </style>
-<div class='root' id="root" bind:this={rootView} on:scroll={onScroll}>
-    <img class="absolute z-[1] w-[120vw] h-[46vw] left-[0] lg:h-full lg:left-0 lg:w-full" src="/images/top_bg.png"/>
+<div class='root' id="root" bind:this={rootView}>
+    <img class="absolute z-[1] w-[120vw] h-[46vw] object-cover left-[0] lg:h-[unset] lg:left-0 lg:w-full"
+         src="/images/top_bg.png"/>
     <HomeSection id="home" contentClass="!min-h-[unset] relative " class="!z-[3]">
 
         <div class="default-container z-[3] flex h-[30vw] justify-center items-start gap-2.5">
-            <Logo  class="h-[60px] w-[134px] lg:w-[257px] lg:h-[115px]"/>
-            <h2 class="text-light text-xs lg:text-base max-w-[519px]">For the fan, by the fan experiences powered by Smart Ticketing and Community Action </h2>
+            <Saos animation={"puff-in-center 0.8s cubic-bezier(0.35, 0.5, 0.65, 0.95) both"}>
+                <Logo class="h-[60px] w-[134px] lg:w-[257px] lg:h-[115px]"/>
+            </Saos>
+            <Saos top="200" animation={"h2 1s cubic-bezier(0.35, 0.5, 0.65, 0.95) both"}>
+                <h2 class="text-light text-xs lg:text-base max-w-[519px]">For the fan, by the fan experiences powered by Smart Ticketing and Community Action </h2>
+            </Saos>
         </div>
 
     </HomeSection>
@@ -266,12 +257,14 @@
             <div class="bg-queue-left"/>
             <div class="bg-queue-right"/>
         </div>
-        <div class="default-container z-[1] flex !flex-col lg:!flex-row justify-center gap-2.5 h-[360px] my-[118px]">
+        <div class="default-container z-[1] flex !flex-col lg:!flex-row justify-center gap-2.5 lg:gap-[10vw] h-[360px] my-[118px]">
             <div class="flex flex-1 justify-center items-center ahead-container">
                 <AheadNumber/>
             </div>
             <div class="skip-queue-container">
-                <span class="text-light">True fans face difficulties purchasing tickets due to scalpers and hidden fees, while web3 ticketing systems struggle to gain popularity among fans who prefer traditional methods.</span>
+                <Saos top="200" animation={"h2 1s cubic-bezier(0.35, 0.5, 0.65, 0.95) both"}>
+                    <span class="text-light">True fans face difficulties purchasing tickets due to scalpers and hidden fees, while web3 ticketing systems struggle to gain popularity among fans who prefer traditional methods.</span>
+                </Saos>
                 <button class="button-skip">Skip the Queue</button>
             </div>
         </div>
@@ -279,28 +272,40 @@
     </HomeSection>
 
     <HomeSection id="intro" contentClass="!min-h-[unset] lg:!min-h-[100vh]">
-        <div class="flex flex-row w-[100vw] h-[100vh] overflow-x-scroll snap-x snap-mandatory">
+        <div class="flex flex-row w-[100vw] h-[100vh] overflow-x-scroll snap-x snap-mandatory"
+             bind:this={scrollIntroRef} on:scroll={onScrollIntro}>
             {#each intros as intro, index}
                 <div class="min-w-[100vw] h-[100vh] scroll-smooth snap-center relative">
                     <img src="/images/bulb.png" class="absolute w-[60vw] h-[100vh] z-[0] right-[-6vw]"/>
                     <div class="default-container flex !flex-col-reverse lg:!flex-row items-center" let:Slide let:index>
                         <div class="flex flex-col h-full justify-center flex-1">
-                            <h2 class="text-3rem font-bold font-okana mt-5 lg:mt-0">Introducing <b class="text-[#1DD836]">V3RIFIED</b></h2>
+                            <div class="mt-5 lg:mt-0">
+                                <Saos top="200" animation={"h2 1s cubic-bezier(0.35, 0.5, 0.65, 0.95) both"}>
+                                    <h2 class="text-3rem font-bold font-okana ">Introducing <b
+                                            class="text-[#1DD836]">V3RIFIED</b></h2>
+                                </Saos>
+                            </div>
+                            <Saos top="200" animation={"h2 1s cubic-bezier(0.35, 0.5, 0.65, 0.95) both"}>
                             <span class="text-light text-xl mt-4">{intro.title}</span>
+                            </Saos>
                             <span class="intro-desc">{@html intro.desc}</span>
                             <button class="button-skip mt-5 w-[248px]">Docs</button>
                         </div>
                         <div class="flex-1 flex h-[100vh] lg:ml-[73px] justify-center items-center relative">
 
-                            <img src={`/images/intro_${index+1}.png`} class="h-[300px] lg:h-[70vh] object-contain z-[1]"/>
+                            <Saos top="200" animation={"slide-right 1s cubic-bezier(0.35, 0.5, 0.65, 0.95) both"}>
+                            <img src={`/images/intro_${index+1}.png`}
+                                 class="h-[300px] lg:h-[70vh] object-contain z-[1]"/>
+                            </Saos>
                         </div>
                     </div>
 
                 </div>
             {/each}
-            <div class="flex flex-row items-center absolute bottom-[75px] mx-auto gap-2 w-full justify-center">
+            <div class="flex no-scrollbar flex-row items-center absolute bottom-[75px] mx-auto gap-2 w-full justify-center">
                 {#each intros as i, index}
-                    <div class={`indicator ${currentIndex===index?'':'opacity-[0.57]'}`}/>
+                    <button on:click={()=>onChangeIndex(index)}
+                            class={`indicator ${currentIndex===index?'':'opacity-[0.57]'}`}></button>
                 {/each}
             </div>
         </div>
@@ -309,8 +314,12 @@
 
     <HomeSection id="people-saying">
         <img src="/images/bg_people.png" class="absolute w-full h-full z-0"/>
-        <div class="default-container !px-0 z-[1] relative">
-            <h2 class="font-okana text-3rem mx-auto mt-16 font-bold">What people are saying</h2>
+        <div class="default-container !px-0 z-[1] relative lg:h-[120vh]">
+            <div class="mx-auto mt-16">
+                <Saos top="200" animation={"h2 1s cubic-bezier(0.35, 0.5, 0.65, 0.95) both"}>
+                    <h2 class="font-okana text-3rem   font-bold">What people are saying</h2>
+                </Saos>
+            </div>
             <PeopleCarousel/>
         </div>
 
@@ -319,28 +328,59 @@
     <HomeSection id="news" contentClass="!min-h-[unset] lg:!min-h-[100vh]">
         <img class="bg-news" src="/images/bg_news.png"/>
         <div class="default-container z-[1] relative justify-center lg:h-[100vh]">
-            <h2 class="font-okana text-[2.25rem] font-bold">What We’re up to</h2>
-            <div class="flex flex-col lg:flex-row w-full gap-3 lg:gap-[30px] overflow-x-scroll mt-10">
-                {#each news as item, index}
-                    <div class="news-item">
-                        <img src={`/images/news_${index+1}.png`} class="w-[100%] h-[150px] lg:h-[14.5vw]"/>
-                        <span class="font-okana text-xl lg:text-[2.5rem] font-bold mt-5 leading-normal lg:mt-14">{item.title}</span>
-                        <span class="tex-sm font-bold text-light leading-[176%] mt-5">{item.desc}</span>
-                        <button class="btn-view-post">View post</button>
-                    </div>
-                {/each}
+            <Saos top="200" animation={"h2 1s cubic-bezier(0.35, 0.5, 0.65, 0.95) both"}>
+                <h2 class="font-okana text-[2.25rem] font-bold">What We’re up to</h2>
+            </Saos>
+            <div class="max-w-[80vw] lg:overflow-x-scroll">
+                <div class="flex flex-col lg:flex-row gap-3 lg:gap-[30px] mt-10">
+                    {#each news as item, index}
+                        <div class="news-item">
+                            <img src={`/images/news_${index+1}.png`} class="w-[100%] h-[150px] lg:h-[14.5vw]"/>
+                            <span class="font-okana text-xl lg:text-[2.5rem] font-bold  leading-normal lg:mt-14 news-title">{item.title}</span>
+                            <span class="tex-sm font-bold text-light leading-[176%]  lime-clamp-2">{item.desc}</span>
+                            <button class="btn-view-post">View post</button>
+                        </div>
+                    {/each}
+                    <div class="min-w-[20vw] h-[100px]"/>
+                    <div class="blur-news"></div>
+                </div>
             </div>
         </div>
 
     </HomeSection>
 
     <HomeSection id="community" contentClass="!min-h-[unset]">
-        <img class="w-full h-[453px] absolute" src="/images/bg_community.png"/>
-        <div class="default-container h-[453px] z-[1] relative items-center justify-center">
+        <img class={`w-full ${isBetaSignup?'h-[553px]':'h-[453px]'} absolute`} src="/images/bg_community.png"/>
+        <div class={`default-container ${isBetaSignup?'h-[553px]':'h-[453px]'} z-[1] relative items-center justify-center`}>
+            <Saos top="200" animation={"h2 1s cubic-bezier(0.35, 0.5, 0.65, 0.95) both"}>
             <h2 class="font-okana text-2xl lg:text-[2.25rem] font-bold leading-normal">Let’s build community together</h2>
-            <h2 class="font-okana text-[#1DD836] text-lg lg:text-[1.875rem] mt-10 font-bold leading-normal"># FOR THE FANS BY THE FANS</h2>
-            <div class="flex flex-row gap-[41px] mt-10 mx-auto ">
-                <button class="btn-community">Beta Access Signup</button>
+            </Saos>
+            <div class="mt-10">
+                <Saos top="200" animation={"h2 1s cubic-bezier(0.35, 0.5, 0.65, 0.95) both"}>
+                    <h2 class="font-okana text-[#1DD836] text-lg lg:text-[1.875rem] font-bold leading-normal"># FOR THE FANS BY THE FANS</h2>
+                </Saos>
+            </div>
+            <div transition:scale={{
+                        duration: 1000,
+                        start: 0,
+                        opacity:0
+                    }}
+                 class={`flex ${isBetaSignup?'flex-col justify-center items-center':'flex-row'} gap-[41px] mt-10 mx-auto `}>
+
+                {#if (isBetaSignup)}
+                    <div class="flex flex-row" transition:scale={{
+                        duration: 1000,
+                        start: 0,
+                        opacity:0
+                    }}>
+                        <input placeholder="Enter your email"
+                               class="text-dark rounded-l-[10px] bg-white py-[18px] px-[28px] w-[300px]"/>
+                        <button class="btn-community !rounded-l-[0]">Beta Access Signup</button>
+                    </div>
+                    <span class="my-3 font-bold text-center mx-auto">Or</span>
+                {:else}
+                    <button class="btn-community" on:click={()=>isBetaSignup=true}>Beta Access Signup</button>
+                {/if}
                 <button class="btn-community">Partner With Us</button>
             </div>
         </div>

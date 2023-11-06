@@ -1,5 +1,7 @@
 <script>
     import IconArrow from "$icons/IconArrow.svelte";
+    import IconCrypto from "$icons/IconCrypto.svelte";
+    import {scale} from 'svelte/transition';
 
     let currentIndex = 0;
     // $:currentIndex && isRight()
@@ -22,7 +24,7 @@
         },
     ]
 
-    $: isLeft = (index)=> {
+    $: isLeft = (index) => {
         console.log("isLeft", index, currentIndex)
         if (currentIndex === 0) {
             return index === 2;
@@ -31,7 +33,7 @@
         }
     }
 
-    $: isRight = (index)=> {
+    $: isRight = (index) => {
         if (currentIndex === 2) {
             return index === 0;
         } else {
@@ -61,10 +63,34 @@
     <div id="spinner">
         {#each list as item, index }
             <div class={`item ${isLeft(index)?'item-left':isRight(index)?'item-right':''}`}>
-                <img src={`/images/people_${index+1}.png`} width="374" height="374" class="w-[180px] lg:w-[26vw] h-[180px] lg:h-[26vw]"/>
+                <img src={`/images/people_${index+1}.png`} width="374" height="374"
+                     class="w-[180px] lg:w-[26vw] h-[180px] lg:h-[26vw]"/>
                 {#if (currentIndex === index)}
-                    <span class="font-okana text-xl lg:text-[2rem] font-bold text-[#1DD836]">{item.name}</span>
-                    <span class="text-sm lg:text-xl font-bold text-center mt-[30px] max-w-[544px]">{item.saying}</span>
+
+                    <span transition:scale={{
+                        duration: 500,
+                        start: 0
+                    }}
+                          class="font-okana text-xl lg:text-[2rem] font-bold text-[#1DD836]">{item.name}</span>
+                    {#if (item.job)}
+                        <button transition:scale={{
+                        duration: 500,
+                        start: 0
+                    }} class="button-job">{item.job}</button>
+                    {/if}
+                    {#if (item.isCrypto)}
+                        <button transition:scale={{
+                        duration: 500,
+                        start: 0
+                    }} class="button-job">
+                            <IconCrypto></IconCrypto>
+                        </button>
+                    {/if}
+                    <span transition:scale={{
+                        duration: 500,
+                        start: 0
+                    }}
+                          class="text-sm lg:text-xl !leading-[176%] font-bold text-center mt-[30px] max-w-[544px]">{item.saying}</span>
                 {/if}
             </div>
         {/each}
@@ -87,7 +113,7 @@
         transform-style: preserve-3d;
         transform-origin: 50% 50% -500px;
         transition: 1s;
-        @apply h-[60vh] lg:h-[80vh]
+        @apply min-h-[60vh] lg:min-h-[100vh]
     }
 
     #spinner div {
@@ -115,4 +141,11 @@
         @apply flex flex-col items-center;
     }
 
+    .button-job {
+        border-radius: 29px;
+        border: 0.5px solid #1DD836;
+        background: linear-gradient(99deg, #1DD83633 4.69%, #97979736 101.36%);
+        backdrop-filter: blur(50px);
+        @apply px-[26px] py-2 lg:py-[11px] font-bold text-xl mt-6;
+    }
 </style>
