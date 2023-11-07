@@ -52,7 +52,7 @@
         {
             title: "Navigating the Future",
             desc: "The product roadmap for a V3RIFIED’s experience and social platform & its implications for KPOP fandoms.\n",
-            link:'https://beta.v3rified.io/p/roadmap-and-the-road-forward'
+            link: 'https://beta.v3rified.io/p/roadmap-and-the-road-forward'
         }, {
             title: "Redefine the Culture",
             desc: "Our motivation for embarking on the journey to provide transformational value for genuine fans. \n",
@@ -157,7 +157,7 @@
 
     .bg-queue-left {
         background: #0F2212;
-        @apply flex flex-1 w-full h-full relative;
+        @apply flex flex-1 w-full h-full relative justify-center items-center;
     }
 
     .bg-queue-left img {
@@ -220,7 +220,7 @@
     }
 
     :global(.intro-desc) {
-        @apply text-sm lg:text-xl font-bold mt-[50px] flex flex-col gap-[30px];
+        @apply text-base lg:text-xl font-bold mt-4 lg:mt-[50px] flex flex-col gap-[30px];
     }
 
     :global(.intro-desc ul) {
@@ -280,28 +280,28 @@
         box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
         backdrop-filter: blur(15px);
         color: white;
-        @apply font-bold text-xl w-[308px] h-[62px];
+        @apply font-bold text-xl w-[70vw] lg:w-[308px] h-[62px];
     }
 
     .blur-news {
         background: linear-gradient(-90deg, #000 30.24%, rgba(0, 0, 0, 0.00) 90.93%);
         height: 100%;
-        @apply absolute right-0 w-[30vw];
+        @apply hidden lg:flex absolute right-0 w-[30vw];
     }
 
 
 </style>
 <div class='root' id="root" bind:this={rootView}>
-    <img class="absolute z-[1] w-[120vw] h-[46vw] object-cover left-[0] lg:h-[unset] lg:left-0 lg:w-full"
+    <img class="absolute z-[1] w-[120vw] h-[220px] object-cover left-[0] lg:h-[unset] lg:left-0 lg:w-full"
          src="/images/top_bg.png"/>
     <HomeSection id="home" contentClass="!min-h-[unset] relative " class="!z-[3]">
 
-        <div class="default-container z-[3] flex h-[30vw] justify-center items-start gap-2.5">
+        <div class="default-container z-[3] flex h-[180px] lg:h-[30vw] justify-center items-start gap-2.5">
             <Saos animation={"puff-in-center 0.8s cubic-bezier(0.35, 0.5, 0.65, 0.95) both"}>
                 <Logo class="h-[60px] w-[134px] lg:w-[257px] lg:h-[115px]"/>
             </Saos>
             <Saos top="200" animation={"h2 1s cubic-bezier(0.35, 0.5, 0.65, 0.95) both"}>
-                <h2 class="text-light text-xs lg:text-base max-w-[519px] flex items-start">{'For the fan, by the fan experiences powered by Smart Ticketing and Community Action'}</h2>
+                <h2 class="text-white text-opacity-100 lg:text-opacity-50 font-bold text-xs lg:text-base max-w-[519px] flex items-start">{'For the fan, by the fan experiences powered by Smart Ticketing and Community Action'}</h2>
             </Saos>
         </div>
 
@@ -312,12 +312,12 @@
             <div class="bg-queue-left">
                 {#each [1, 2, 3, 4] as item}
                     <img alt="queue" src={`/images/queue_${item}.png`}
-                         class="absolute object-cover w-full h-full transition-all"/>
+                         class="absolute object-cover mt-10 lg:mt-[unset] w-[90vw] rounded-[20px] lg:rounded-[unset] lg:w-full h-[81vw] lg:h-full transition-all"/>
                 {/each}
             </div>
             <div class="bg-queue-right"/>
         </div>
-        <div class="default-container z-[1] flex !flex-col lg:!flex-row justify-center gap-2.5 lg:gap-[10vw] h-[360px] my-[118px]">
+        <div class="default-container z-[1] flex !flex-col lg:!flex-row justify-center gap-2.5 lg:gap-[10vw] h-[500px] lg:h-[360px] mt-[80px] mb-[40px] lg:my-[118px]">
             <div class="flex flex-1 justify-center items-center ahead-container">
 
             </div>
@@ -332,24 +332,32 @@
     </HomeSection>
 
     <HomeSection id="intro" contentClass="!min-h-[unset] lg:!min-h-[100vh]">
-        <div class="flex flex-row w-[100vw] h-[100vh] overflow-x-scroll snap-x snap-mandatory"
+        <div class="flex lg:hidden mb-5 mt-10 ml-5">
+            <Saos top="200" animation={"h2 1s cubic-bezier(0.35, 0.5, 0.65, 0.95) both"}>
+                <h2 class="text-3rem font-bold font-okana ">Introducing <b class="text-[#1DD836]">V3RIFIED</b></h2>
+            </Saos>
+        </div>
+        <div class="flex flex-row w-[100vw] h-[135vh] lg:h-[100vh] overflow-x-scroll snap-x snap-mandatory"
              bind:this={scrollIntroRef} on:scroll={onScrollIntro}>
             {#each intros as intro, index}
                 <div class="min-w-[100vw] h-[100vh] scroll-smooth snap-center relative">
-                    <img src="/images/bulb.png" class="absolute w-[60vw] h-[100vh] z-[0] right-[-6vw]"/>
+                    <img src="/images/bulb.png" class="absolute w-[120vw] object-cover lg:object-contain lg:w-[60vw] h-[100vh] z-[0] lg:right-[-6vw]"/>
                     <div class="default-container flex !flex-col-reverse lg:!flex-row items-center" let:Slide let:index>
                         <div class="flex flex-col h-full justify-center flex-1">
-                            <div class="mt-5 lg:mt-0">
+                            <div class="mt-5 lg:mt-0 hidden lg:flex">
                                 <Saos top="200" animation={"h2 1s cubic-bezier(0.35, 0.5, 0.65, 0.95) both"}>
                                     <h2 class="text-3rem font-bold font-okana ">Introducing <b
                                             class="text-[#1DD836]">V3RIFIED</b></h2>
                                 </Saos>
                             </div>
-                            <Saos top="200" animation={"h2 1s cubic-bezier(0.35, 0.5, 0.65, 0.95) both"}>
-                                <span class="text-light text-xl mt-4">{intro.title}</span>
-                            </Saos>
+                            <div class="mt-14 lg:mt-4">
+                                <Saos top="200" animation={"h2 1s cubic-bezier(0.35, 0.5, 0.65, 0.95) both"}>
+                                    <span class="text-light text-base lg:text-xl ">{intro.title}</span>
+                                </Saos>
+                            </div>
                             <span class="intro-desc">{@html intro.desc}</span>
-                            <a href="https://docs.v3rified.io/" target="_blank" class="button-skip mt-5 w-[248px]">Docs</a>
+                            <a href="https://docs.v3rified.io/" target="_blank"
+                               class="button-skip mt-5 w-[248px]">Docs</a>
                         </div>
                         <div class="flex-1 flex h-[100vh] lg:ml-[73px] justify-center items-center relative">
 
@@ -362,7 +370,7 @@
 
                 </div>
             {/each}
-            <div class="flex no-scrollbar flex-row items-center absolute bottom-[75px] mx-auto gap-2 w-full justify-center">
+            <div class="flex no-scrollbar flex-row items-center absolute top-[450px] lg:bottom-[75px] mx-auto gap-2 w-full justify-center">
                 {#each intros as i, index}
                     <button on:click={()=>onChangeIndex(index)}
                             class={`indicator ${currentIndex===index?'':'opacity-[0.57]'}`}></button>
@@ -373,8 +381,8 @@
     </HomeSection>
 
     <HomeSection id="people-saying">
-        <img src="/images/bg_people.png" class="absolute w-full h-full z-0"/>
-        <div class="default-container !px-0 z-[1] relative lg:h-[120vh]">
+        <img src="/images/bg_people.png" class="absolute w-[200vw] h-[100vw] top-[12vh] lg:top-[unset] lg:w-full lg:h-full z-0"/>
+        <div class="default-container !px-0 z-[1] relative h-[120vh] lg:h-[120vh]">
             <div class="mx-auto mt-16">
                 <Saos top="200" animation={"h2 1s cubic-bezier(0.35, 0.5, 0.65, 0.95) both"}>
                     <h2 class="font-okana text-3rem   font-bold">What people are saying</h2>
@@ -387,11 +395,11 @@
 
     <HomeSection id="news" contentClass="!min-h-[unset] lg:!min-h-[100vh]">
         <img class="bg-news" src="/images/bg_news.png"/>
-        <div class="default-container z-[1] relative justify-center lg:h-[100vh]">
+        <div class="default-container z-[1] relative items-center lg:items-start justify-center lg:h-[100vh]">
             <Saos top="200" animation={"h2 1s cubic-bezier(0.35, 0.5, 0.65, 0.95) both"}>
                 <h2 class="font-okana text-[2.25rem] font-bold">What We’re up to</h2>
             </Saos>
-            <div class="max-w-[80vw] lg:overflow-x-scroll">
+            <div class="max-w-[90vw] mb-10 lg:mb-[unset] lg:max-w-[80vw] lg:overflow-x-scroll">
                 <div class="flex flex-col lg:flex-row gap-3 lg:gap-[30px] mt-10">
                     {#each news as item, index}
                         <div class="news-item">
@@ -401,7 +409,7 @@
                             <a href={item.link} target="_blank" class="btn-view-post">View post</a>
                         </div>
                     {/each}
-                    <div class="min-w-[20vw] h-[100px]"/>
+                    <div class="hidden lg:flex min-w-[20vw] h-[100px]"/>
                     <div class="blur-news"></div>
                 </div>
             </div>
@@ -410,14 +418,14 @@
     </HomeSection>
 
     <HomeSection id="community" contentClass="!min-h-[unset]">
-        <img class={`w-full ${isBetaSignup?'h-[553px]':'h-[453px]'} absolute`} src="/images/bg_community.png"/>
+        <img class={`w-full ${isBetaSignup?'h-[553px]':'h-[453px]'} absolute object-cover`} src="/images/bg_community.png"/>
         <div class={`default-container ${isBetaSignup?'h-[553px]':'h-[453px]'} z-[1] relative items-center justify-center`}>
             <Saos top="200" animation={"h2 1s cubic-bezier(0.35, 0.5, 0.65, 0.95) both"}>
                 <h2 class="font-okana text-2xl lg:text-[2.25rem] font-bold leading-normal">{'Let’s build community together'}</h2>
             </Saos>
             <div class="mt-10">
                 <Saos top="200" animation={"h2 1s cubic-bezier(0.35, 0.5, 0.65, 0.95) both"}>
-                    <h2 class="font-okana text-[#1DD836] text-lg lg:text-[1.875rem] font-bold leading-normal">{'# FOR THE FANS BY THE FANS'}</h2>
+                    <h2 class="font-okana text-[#1DD836] text-base lg:text-[1.875rem] font-bold leading-normal">{'# FOR THE FANS BY THE FANS'}</h2>
                 </Saos>
             </div>
             <div transition:scale={{
@@ -425,7 +433,7 @@
                         start: 0,
                         opacity:0
                     }}
-                 class={`flex ${isBetaSignup?'flex-col justify-center items-center':'flex-row'} gap-[41px] mt-10 mx-auto `}>
+                 class={`flex ${isBetaSignup?'flex-col justify-center items-center':'flex-col lg:flex-row'} gap-2.5 lg:gap-[41px] mt-10 mx-auto `}>
 
                 {#if (isBetaSignup)}
                     <div class="flex flex-row" transition:scale={{
@@ -434,8 +442,9 @@
                         opacity:0
                     }}>
                         <input placeholder="Enter your email"
-                               class="text-dark rounded-l-[10px] bg-white py-[18px] px-[28px] w-[300px]"/>
-                        <button class="btn-community !rounded-l-[0]">Beta Access Signup</button>
+                               class="text-dark rounded-l-[10px] bg-white py-[18px] px-[28px] flex flex-1 w-[unset] lg:w-[300px]"/>
+                        <button class="btn-community hidden lg:flex !w-[100px] lg:!w-[308px] !rounded-l-[0]">Beta Access Signup</button>
+                        <button class="btn-community flex items-center justify-center lg:hidden !w-[100px] lg:!w-[308px] !rounded-l-[0]">Signup</button>
                     </div>
                     <span class="my-3 font-bold text-center mx-auto">Or</span>
                 {:else}

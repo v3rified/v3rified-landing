@@ -89,15 +89,15 @@
                         duration: 500,
                         start: 0
                     }}
-                          class="text-sm lg:text-xl !leading-[176%] font-bold text-center mt-[30px] max-w-[544px]">{item.saying}</span>
+                          class="text-sm lg:text-xl !leading-[176%] font-bold text-center mt-[30px] max-w-[70vw] lg:max-w-[544px]">{item.saying}</span>
                 {/if}
             </div>
         {/each}
     </div>
-    <button class="absolute top-[40%]" on:click={onPre}>
+    <button class="absolute top-[45%] lg:top-[40%]" on:click={onPre}>
         <IconArrow/>
     </button>
-    <button class="absolute top-[40%] right-0" on:click={onNext}>
+    <button class="absolute top-[45%] lg:top-[40%] right-0" on:click={onNext}>
         <IconArrow class="rotate-180"/>
     </button>
 </div>
@@ -145,6 +145,6 @@
         border: 0.5px solid #1DD836;
         background: linear-gradient(99deg, #1DD83633 4.69%, #97979736 101.36%);
         backdrop-filter: blur(50px);
-        @apply px-[26px] py-2 lg:py-[11px] font-bold text-xl mt-6;
+        @apply px-4 lg:px-[26px] py-1 lg:py-[11px] font-bold text-sm lg:text-xl mt-2 lg:mt-6;
     }
 </style>
