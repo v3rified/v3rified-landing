@@ -160,6 +160,7 @@
         @apply flex flex-1 w-full h-full relative justify-center items-center;
     }
 
+
     .bg-queue-left img {
         opacity: 0;
         animation: change-img-anim 12s infinite;
@@ -309,9 +310,16 @@
 
     <HomeSection id="queue" contentClass="!min-h-[unset]" class="mt-5 lg:mt-[-15px]">
         <div class="absolute z-0 flex flex-col lg:flex-row top-0 bottom-0 left-0 right-0">
-            <div class="bg-queue-left">
+            <div class="bg-queue-left !hidden lg:!flex">
                 {#each [1, 2, 3, 4] as item}
                     <img alt="queue" src={`/images/queue_${item}.png`}
+                         class="absolute object-cover mt-10 lg:mt-[unset] w-[90vw] rounded-[20px] lg:rounded-[unset] lg:w-full h-[81vw] lg:h-full transition-all"/>
+                {/each}
+            </div>
+
+            <div class="bg-queue-left !flex lg:!hidden">
+                {#each [1, 2, 3, 4] as item}
+                    <img alt="queue" src={`/images/queue_mobile_${item}.png`}
                          class="absolute object-cover mt-10 lg:mt-[unset] w-[90vw] rounded-[20px] lg:rounded-[unset] lg:w-full h-[81vw] lg:h-full transition-all"/>
                 {/each}
             </div>
@@ -381,9 +389,9 @@
     </HomeSection>
 
     <HomeSection id="people-saying">
-        <img src="/images/bg_people.png" class="absolute w-[200vw] h-[100vw] top-[12vh] lg:top-[unset] lg:w-full lg:h-full z-0"/>
+        <img src="/images/bg_people.png" class="absolute w-[150vw] h-[100vh] object-fill lg:object-contain top-[10px] lg:top-[unset] lg:w-full lg:h-full z-0"/>
         <div class="default-container !px-0 z-[1] relative h-[120vh] lg:h-[120vh]">
-            <div class="mx-auto mt-16">
+            <div class="mx-auto mt-[100px] lg:mt-16">
                 <Saos top="200" animation={"h2 1s cubic-bezier(0.35, 0.5, 0.65, 0.95) both"}>
                     <h2 class="font-okana text-3rem   font-bold">What people are saying</h2>
                 </Saos>
@@ -441,10 +449,9 @@
                         start: 0,
                         opacity:0
                     }}>
-                        <input placeholder="Enter your email"
-                               class="text-dark rounded-l-[10px] bg-white py-[18px] px-[28px] flex flex-1 w-[unset] lg:w-[300px]"/>
-                        <button class="btn-community hidden lg:flex !w-[100px] lg:!w-[308px] !rounded-l-[0]">Beta Access Signup</button>
-                        <button class="btn-community flex items-center justify-center lg:hidden !w-[100px] lg:!w-[308px] !rounded-l-[0]">Signup</button>
+                        <iframe src="https://embeds.beehiiv.com/c3b2304e-07ac-42d6-8a5d-a3c360aafb51?slim=true"
+                                data-test-id="beehiiv-embed" height="52" width="300" frameborder="0" scrolling="no"
+                                style="margin: 0; border-radius: 0px !important; background-color: transparent;"></iframe>
                     </div>
                     <span class="my-3 font-bold text-center mx-auto">Or</span>
                 {:else}
